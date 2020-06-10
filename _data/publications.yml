@@ -51,6 +51,31 @@
 #       url: https://twitter.com/mctucsf/status/1172334750205218816
 ---
 
+- citation: "***GABA(B), GPCR, H. sapiens*** <br><br>
+H Shaye,  A Ishchenko, JH Lam, GW Han, L Xue, P Rondard, JP Pin, V Katritch, **C Gati&#42;**, V. Cherezov&#42;
+Human metabotropic GABA(B) receptor in its apo state. <br><br>
+***Nature.*** 2020."
+  date: '202006'
+  #image: '/static/img/pub/202004-rv1819c.png'
+  movie: '/static/img/pub/gaba_small.mp4'
+  pmid: ''
+  paired_maps_and_models:
+      - pdb: 6VJM
+        emdb: '21219'
+      - pdb: 6UOA
+        emdb: '20824'
+      - pdb: 6UO0
+        emdb: '20823'
+      - pdb: 6UO8
+        emdb: '20822'
+
+  links:
+    - name: Tweet @CorneliusGati
+      url: https://twitter.com/CorneliusGati/status/1270533535741300737
+    - name: Cherezov lab @ USC
+      url: http://cherezov.usc.edu/
+
+
 - citation: "***Rv1819c, ABC Transporter, M. tuberculosis*** <br><br>
 S Rempel, **C Gati&#42;**, M Nijland, C Thangaratnarajah, A Karyolaimos, JW de Gier, A Guskov&#42;, DJ Slotboom&#42;. <br>
 A mycobacterial ABC transporter mediates the uptake of hydrophilic compounds. <br><br>
