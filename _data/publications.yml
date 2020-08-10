@@ -56,7 +56,7 @@ N Tsutsumi,  S Mukherjee, D Waghray, CY Janda, KM Jude, Y Miao, JS Burg, **NG Ad
 Structure of human Frizzled5 by fiducial-assisted cryo-EM supports a heterodimeric mechanism of canonical Wnt signaling. <br><br>
 ***eLife.*** 2020."
   date: '202008'
-  image: '/static/img/pub/202008-Fz6.jpeg'
+  image: '/static/img/pub/202008-Fz5.jpeg'
   pmid: ''
   paired_maps_and_models:
       - pdb: 6WW2
@@ -65,7 +65,7 @@ Structure of human Frizzled5 by fiducial-assisted cryo-EM supports a heterodimer
   links:
     - name: Tweet @CorneliusGati
       url: https://twitter.com/CorneliusGati/status/1291760454650351621
-    - name: Garcia lab @ stanford
+    - name: Garcia lab @ Stanford
       url: http://med.stanford.edu/garcialab.html
     - name: Kossiakoff lab @ U Chicago
       url: https://kosslab.uchicago.edu/
