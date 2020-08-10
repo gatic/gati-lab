@@ -51,8 +51,28 @@
 #       url: https://twitter.com/mctucsf/status/1172334750205218816
 ---
 
+- citation: "***Fzd5, GPCR, H. sapiens*** <br><br>
+N Tsutsumi,  S Mukherjee, D Waghray, CY Janda, KM Jude, Y Miao, JS Burg, **NG Aduri**, AA Kossiakoff, **C Gati&#42;**, KC Garcia&#42; <br>
+Structure of human Frizzled5 by fiducial-assisted cryo-EM supports a heterodimeric mechanism of canonical Wnt signaling. <br><br>
+***eLife.*** 2020."
+  date: '202008'
+  image: '/static/img/pub/202008-Fz6.jpeg'
+  pmid: ''
+  paired_maps_and_models:
+      - pdb: 6WW2
+        emdb: '21927'
+
+  links:
+    - name: Tweet @CorneliusGati
+      url: https://twitter.com/CorneliusGati/status/1291760454650351621
+    - name: Garcia lab @ stanford
+      url: http://med.stanford.edu/garcialab.html
+    - name: Kossiakoff lab @ U Chicago
+      url: https://kosslab.uchicago.edu/
+
+
 - citation: "***GABA(B), GPCR, H. sapiens*** <br><br>
-H Shaye,  A Ishchenko, JH Lam, GW Han, L Xue, P Rondard, JP Pin, V Katritch, **C Gati&#42;**, V. Cherezov&#42; <br>
+H Shaye,  A Ishchenko, JH Lam, GW Han, L Xue, P Rondard, JP Pin, V Katritch, **C Gati&#42;**, V Cherezov&#42; <br>
 Structural basis of the activation of a metabotropic GABA receptor. <br><br>
 ***Nature.*** 2020."
   date: '202006'
