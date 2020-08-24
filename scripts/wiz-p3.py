@@ -19,6 +19,8 @@ import matplotlib.mlab as mlab
 import operator
 import collections
 import matplotlib.backends.backend_pdf
+import scipy
+from scipy import stats
 
 # from operator import itemgetter
 
