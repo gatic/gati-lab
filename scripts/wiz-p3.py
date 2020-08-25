@@ -171,19 +171,15 @@ labels = np.arange(0, classes + 2)
 # cb1 = plt.colorbar(mat, ticks=labels)
 loc = labels + .5
 cb1.set_xticks(loc)
-# cb1.set_ticklabels(labels)
-# cb1.ax.tick_params(labelsize=16)
-# cb1.set_label('Class #')
-# cb1.set_label('Color for each class')
+cb1.set_ticklabels(labels)
+cb1.ax.tick_params(labelsize=16)
+cb1.set_label('Class #')
+cb1.set_label('Color for each class')
 
 a = ax1.get_xticks().tolist()
 a[0] = 'no class'
 a[1:-1] = labels[1:-1]
 ax1.set_xticklabels(a)
-
-cb1.ax.tick_params(labelsize=16)
-cb1.set_label('Class #')
-cb1.set_label('Color for each class')
 
 pdf.savefig()
 
