@@ -19,6 +19,7 @@ import matplotlib.mlab as mlab
 import operator
 import collections
 import matplotlib.backends.backend_pdf
+# The original plotting package is deprecated. Use scipy instead
 import scipy
 from scipy import stats
 
@@ -122,7 +123,7 @@ checklistcol = []
 anglerot = []
 rescol = []
 
-with open('%s/%s_it016_data.star' % (folder, rootname), 'rb') as f:
+with open('%s/%s_it016_data.star' % (folder, rootname), 'r') as f:
     for l in f:
         if l[0] == '_' and 10 < len(l) < 50:  # check header
             if l.split()[0] == '_rlnClassNumber':  # check header for ClassNumber column
@@ -168,20 +169,21 @@ cb1 = matplotlib.colorbar.ColorbarBase(ax1, cmap=cmap, norm=norm,
 labels = np.arange(0, classes + 2)
 
 # cb1 = plt.colorbar(mat, ticks=labels)
-
 loc = labels + .5
-cb1.set_ticks(loc)
-cb1.set_ticklabels(labels)
-cb1.ax.tick_params(labelsize=16)
-cb1.set_label('Class #')
-cb1.set_label('Color for each class')
-
-# cb1.set_label('Class \'0\' means unassigned when using small subset')
+cb1.set_xticks(loc)
+# cb1.set_ticklabels(labels)
+# cb1.ax.tick_params(labelsize=16)
+# cb1.set_label('Class #')
+# cb1.set_label('Color for each class')
 
 a = ax1.get_xticks().tolist()
 a[0] = 'no class'
 a[1:-1] = labels[1:-1]
 ax1.set_xticklabels(a)
+
+cb1.ax.tick_params(labelsize=16)
+cb1.set_label('Class #')
+cb1.set_label('Color for each class')
 
 pdf.savefig()
 
@@ -208,7 +210,7 @@ for datafile in iterationlist:
     particle = 0
     changesum = 0
     if int(iteration) > 1:
-        with open('%s/%s' % (folder, datafile), 'rb') as f:
+        with open('%s/%s' % (folder, datafile), 'r') as f:
             for l in f:
                 if '@' in l:
                     groupnum = l.split()[classcolumn]  # # Class number
@@ -251,7 +253,7 @@ for datafile in iterationlist:
 
     miciterdict = collections.OrderedDict(sorted(miciterdict.items(),
             key=operator.itemgetter(0)))
-    for (key, value) in miciterdict.iteritems():
+    for (key, value) in miciterdict.items():  ## In Python3, dict.iteritems was renamed to dict.items
         michisto = []
         for numb in value:
             michisto.append(float(numb))
@@ -269,7 +271,7 @@ translation = np.zeros((int(classes) + 1, iterations), dtype=np.double)
 
 for datafile in iterationlist:
     iteration = int((datafile.split('_')[-2])[2:])
-    with open('%s/%s_model.star' % (folder, datafile[:-10]), 'rb') as f:
+    with open('%s/%s_model.star' % (folder, datafile[:-10]), 'r') as f:
         for l in f:
             if '_rlnAccuracyRotations' in l:
                 rotationcol = int(l.split('#')[-1]) - 1
@@ -413,7 +415,7 @@ labelsY = []
 
 for c in check:
     checkdict[c[:][1][-1]].append(c[:][1][-2])
-for (key, value) in checkdict.iteritems():
+for (key, value) in checkdict.items():
     (hist, bins) = np.histogram(value, bins=np.arange(1, int(classes)
                                 + 2))  # , normed=True)
     checktest.append(hist)
@@ -431,7 +433,7 @@ plt.grid()
 ticks = np.arange(0, int(classes) + 1)
 labelsX = np.arange(1, int(classes) + 2)
 plt.xticks(ticks, labelsX)
-plt.yticks(ticks, labelsY)
+# plt.yticks(ticks, labelsY)
 plt.imshow(checktest, aspect='auto', interpolation='nearest',
            origin='lower')  # FIXME values in box
 cb2 = plt.colorbar(ticks=np.arange(0, 1, 0.1))
@@ -521,7 +523,7 @@ plt.grid()
 # histbins = sorted(set(scorelist))
 
 histbins = np.arange(0, .5, 0.05)
-plt.hist(scorelist, bins=histbins, normed=True)
+plt.hist(scorelist, bins=histbins, density=True)
 mean1 = np.mean(scorelist)
 variance1 = np.var(scorelist)
 sigma1 = np.sqrt(variance1)
@@ -562,21 +564,21 @@ for column in checkarraysorted.transpose():
 
         # print groupnumarraysorted[:,-1][ci]-1, ci, col
 
-    for (key, value) in lastitgrouparray.iteritems():
+    for (key, value) in lastitgrouparray.items():
         histocolarray[key].append(value)
 
         # print key....#STILL has 0,3,4!!!
 
 fincolarray = collections.defaultdict(list)
 
-for (key, value) in histocolarray.iteritems():
+for (key, value) in histocolarray.items():
     for (vi, v) in enumerate(value):
 
         # print key, vi, v....................########### LOSING KEY
 
         fincolarray[vi].append(v)
 
-for (key2, value2) in fincolarray.iteritems():
+for (key2, value2) in fincolarray.items():
     rangeval = []  # temp2 = [];
     temp = []
 
@@ -600,7 +602,7 @@ for (key2, value2) in fincolarray.iteritems():
 
                 # d = c+1
 
-                d = int(histocolarray.keys()[c]) + 1  # recolor based on class HACK
+                d = int(list(histocolarray.keys())[c]) + 1  # recolor based on class HACK
                 plt.setp(p, 'facecolor', cmap(d))
 
             # plt.colorbar(ticks=np.arange(1, int(classes)+1))
@@ -637,7 +639,7 @@ if filtstar != 'false' or micfilt != '':
 
  # #######################
 
-    with open(initstarfile, 'rb') as g:
+    with open(initstarfile, 'r') as g:
         for m in g:
             if '@' not in m:
                 a1.write(m)

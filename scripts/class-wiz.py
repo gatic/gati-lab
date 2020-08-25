@@ -132,6 +132,7 @@ cmap = plt.get_cmap('jet', int(classes)+1)
 norm = matplotlib.colors.Normalize(vmin=1, vmax=int(classes)+2)
 #ticks = np.arange(1, int(classes)+1)
 cb1 = matplotlib.colorbar.ColorbarBase(ax1, cmap=cmap, norm=norm, orientation='horizontal')
+
 #colorbar stuff
 labels = np.arange(0, classes+2)
 #cb1 = plt.colorbar(mat, ticks=labels)
