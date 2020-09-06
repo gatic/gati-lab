@@ -139,7 +139,7 @@ print(('Plots will be generated for the following columns:',
 
 ## Initial colorbar
 
-fig = plt.figure()
+fig = plt.figure(figsize=(9, 11))
 ax1 = fig.add_axes([0.05, 0.80, 0.9, 0.15])
 cmap = plt.get_cmap('jet', int(classes) + 1)
 norm = matplotlib.colors.Normalize(vmin=1, vmax=int(classes) + 2)
@@ -272,7 +272,7 @@ if len(set(rotation[0])) > 1:
 # Rotational
 
     cmap = plt.get_cmap('jet', int(classes) + 1)
-    plt.figure(num=None, dpi=80, facecolor='white')
+    plt.figure(num=None, dpi=80, facecolor='white',figsize=(9, 11))
     plt.title('RotationalAccuracy', fontsize=16, fontweight='bold')
     plt.xlabel('Iteration #', fontsize=13)
     plt.ylabel('RotationalAccuracy', fontsize=13)
@@ -290,7 +290,7 @@ if len(set(rotation[0])) > 1:
 # Translational
 
     cmap = plt.get_cmap('jet', int(classes) + 1)
-    plt.figure(num=None, dpi=80, facecolor='white')
+    plt.figure(num=None, dpi=80, facecolor='white', figsize=(9, 11))
     plt.title('TranslationalAccuracy', fontsize=16, fontweight='bold')
     plt.xlabel('Iteration #', fontsize=13)
     plt.ylabel('TranslationalAccuracy', fontsize=13)
@@ -317,7 +317,7 @@ groupnumarraysorted = groupnumarray[sortindices]
 H = groupnumarraysorted[:, :]
 cmap = plt.get_cmap('jet', int(classes) + 1)
 norm = matplotlib.colors.Normalize(vmin=0, vmax=int(classes) + 1)
-plt.figure(num=None, dpi=120, facecolor='white')
+plt.figure(num=None, dpi=120, facecolor='white', figsize=(9, 11))
 plt.title('Class assignments of each particle', fontsize=16,
           fontweight='bold')
 plt.xlabel('Iteration #', fontsize=13)
@@ -354,7 +354,7 @@ plt.close()
 H = groupnumarraysorted[:, :]
 cmap = plt.get_cmap('jet', int(classes) + 1)
 norm = matplotlib.colors.Normalize(vmin=0, vmax=int(classes) + 1)
-plt.figure(num=None, dpi=120, facecolor='white')
+plt.figure(num=None, dpi=120, facecolor='white', figsize=(9, 11))
 plt.title('Class assignments of each particle - last 5 iterations',
           fontsize=16, fontweight='bold')
 plt.xlabel('Iteration #', fontsize=13)
@@ -397,7 +397,7 @@ for (key, value) in list(checkdict.items()):
     checktest.append(hist)
     labelsY.append(int(key))
 
-fig = plt.figure(num=None, dpi=80, facecolor='white')
+fig = plt.figure(num=None, dpi=80, facecolor='white', figsize=(9, 11))
 ax = fig.add_subplot(111)
 plt.title('Class assignment of each particle - last iteration',
           fontsize=16, fontweight='bold')
@@ -442,7 +442,7 @@ micval = np.array(micval)
 ### Plot heat map last iteration
 
 cmap = plt.get_cmap('jet', np.max(micval) - np.min(micval) + 1)
-plt.figure(num=None, dpi=80, facecolor='white')
+plt.figure(num=None, dpi=80, facecolor='white', figsize=(9, 11))
 plt.title('Class assignments of each micrograph - last iteration',
           fontsize=16, fontweight='bold')
 plt.xlabel('Class #', fontsize=13)
@@ -490,7 +490,7 @@ for g in groupnumarraysorted[:, 2:]:
     score1 = stayed / score2 / (iterations - 2)
     scorelist.append(score1)
 
-plt.figure(num=None, dpi=80, facecolor='white')
+plt.figure(num=None, dpi=80, facecolor='white', figsize=(9, 11))
 plt.title('Particle jump score', fontsize=16, fontweight='bold')
 plt.xlabel('Score = (# class assignments/# of iterations)', fontsize=13)
 plt.ylabel('# of particles with score normalized', fontsize=13)
@@ -514,7 +514,7 @@ pdf.savefig()
 plt.close()
 ### Number of assignment changes per iteration
 
-plt.figure(num=None, dpi=80, facecolor='white')
+plt.figure(num=None, dpi=80, facecolor='white', figsize=(9, 11))
 plt.title('Total assignment changes per iteration', fontsize=16,
           fontweight='bold')
 plt.xlabel('Iteration #', fontsize=13)
@@ -567,7 +567,7 @@ for (key2, value2) in list(fincolarray.items()):
             temp.append(v2)
 
     if len(temp) > 0:
-        plt.figure(num=None, dpi=120, facecolor='white')
+        plt.figure(num=None, dpi=120, facecolor='white', figsize=(9, 11))
 
         if plottype == 'bar':
             (n, bins, patches) = plt.hist(temp, range=(min(rangeval),
