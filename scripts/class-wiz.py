@@ -132,6 +132,7 @@ cmap = plt.get_cmap('jet', int(classes)+1)
 norm = matplotlib.colors.Normalize(vmin=1, vmax=int(classes)+2)
 #ticks = np.arange(1, int(classes)+1)
 cb1 = matplotlib.colorbar.ColorbarBase(ax1, cmap=cmap, norm=norm, orientation='horizontal')
+
 #colorbar stuff
 labels = np.arange(0, classes+2)
 #cb1 = plt.colorbar(mat, ticks=labels)
@@ -141,10 +142,13 @@ cb1.set_ticklabels(labels)
 cb1.ax.tick_params(labelsize=16)
 cb1.set_label('Class #')
 cb1.set_label('Color for each class')
+
 #cb1.set_label('Class \'0\' means unassigned when using small subset')
 a=ax1.get_xticks().tolist()
+print(a)
 a[0]='no class'
 a[1:-1]=labels[1:-1]
+print(a)
 ax1.set_xticklabels(a)
 
 pdf.savefig()
