@@ -1,39 +1,27 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-## Script to investigate convergence behaviour in relion 3D classification
-## Copyright Cornelius Gati 2020 - SLAC Natl Acc Lab - cgati@stanford.edu
+#### Script to investigate convergence behaviour in relion 3D classification
+#### Copyright Cornelius Gati 2020 - SLAC Natl Acc Lab - cgati@stanford.edu
 
 import os
 import sys
 import numpy as np
+import scipy
+from scipy import stats
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
 import operator
 import collections
 import matplotlib.backends.backend_pdf
-# The original plotting package is deprecated. Use scipy instead
-import scipy
-from scipy import stats
-
-# from operator import itemgetter
 
 ################INPUT
 
-print ('Please specify:')
-print ('--f 		folder path 							(default: current folder)')
-print ('--root 		root name 							(default: \'run\')')
-print ('--o		output pdf name 						(default: output.pdf)')
-print ('--filt 		\'true\' or \'false\' obtain filtered.star file 			(default: false)')
-print ('--sigmafac 	cutoff for \'filt\', how many sigma above mean 			(default: 1)')
-print ('--mic		minimum cutoff for CTFFIND/Gctf resolution estimate 		(default: none)')
+print('Please specify:')
+print('--f 		folder path 							(default: current folder)')
+print('--root 		root name 							(default: \'run\')')
+print('--o		output pdf name 						(default: output.pdf)')
+print('--filt 		\'true\' or \'false\' obtain filtered.star file 			(default: false)')
+print('--sigmafac 	cutoff for \'filt\', how many sigma above mean 			(default: 1)')
+print('--mic		minimum cutoff for CTFFIND/Gctf resolution estimate 		(default: none)')
 
 folder = '.'
 rootname = 'run'
@@ -70,7 +58,7 @@ for (si, s) in enumerate(sys.argv):
 filesdir = sorted(os.listdir(folder))
 unwanted = []
 
-## Check number of iterations
+##Check number of iterations
 
 iterationlist = []
 iterationtemp = []
@@ -82,14 +70,11 @@ for datafile in filesdir:
         if 'it001' in datafile and len(folder) == 0:  # Get rootname by looking at first iteration if not specified
             rootname = datafile.split('_it')[0]
         if 'ct' in datafile.split('_')[-3]:
-            if int((datafile.split('_')[-2])[2:])                 != int((datafile.split('_')[-3])[2:]):
+            if int((datafile.split('_')[-2])[2:]) \
+                != int((datafile.split('_')[-3])[2:]):
                 iterationtemp.append(datafile)
         if 'ct' not in datafile.split('_')[-3]:
             iterationtemp.append(datafile)
-
-        # if 'ct' in datafile.split('_')[-3]:
-        # if int(datafile.split('_')[-2][2:]) != int(datafile.split('_')[-3][2:]):
-        # ....iterationtemp.append(datafile)
 
         iterations.append(int((datafile.split('_')[-2])[2:]))
 
@@ -101,17 +86,17 @@ pdf = matplotlib.backends.backend_pdf.PdfPages('%s' % output)
 
 iterationlist = sorted(iterationtemp, key=lambda x: x.split('_')[-2])
 if len(iterations) == 0:
-    print ('')
-    print ('I cannot find any data.star files in the provided folder!')
+    print('')
+    print('I cannot find any data.star files in the provided folder!')
     sys.exit()
 
 iterations = max(iterations) + 1
 
 ##Print used input data.star files
 
-print ('')
+print('')
 for files in iterationlist:
-    print ('Using %s as input' % files)
+    print('Using %s as input' % files)
 
 ##Check number of particles, number of classes, number of micrographs
 
@@ -148,9 +133,9 @@ with open('%s/%s_it016_data.star' % (folder, rootname), 'r') as f:
 
 classes = max(classes)
 
-print ('')
-print ('Plots will be generated for the following columns:',
-       checklistcol)
+print('')
+print(('Plots will be generated for the following columns:',
+       checklistcol))
 
 ## Initial colorbar
 
@@ -159,32 +144,23 @@ ax1 = fig.add_axes([0.05, 0.80, 0.9, 0.15])
 cmap = plt.get_cmap('jet', int(classes) + 1)
 norm = matplotlib.colors.Normalize(vmin=1, vmax=int(classes) + 2)
 
-# ticks = np.arange(1, int(classes)+1)
-
-cb1 = matplotlib.colorbar.ColorbarBase(ax=ax1, cmap=cmap, norm=norm,
-        orientation='horizontal')
+cb1 = matplotlib.colorbar.ColorbarBase(ax1, cmap=cmap, norm=norm,
+        orientation='horizontal', label='Color for each class')
 
 # colorbar stuff
 
 labels = np.arange(0, classes + 2)
 
-# cb1 = plt.colorbar(mat, ticks=labels)
-loc = labels + .5
+loc = labels + 0.5
 cb1.set_ticks(loc)
-cb1.set_ticklabels(labels)
-cb1.ax.tick_params(labelsize=16)
-cb1.set_label('Class #')
-cb1.set_label('Color for each class')
 
 a = ax1.get_xticks().tolist()
-a[0] = 'no class'
-a[1:-1] = labels[1:-1]
-ax1.set_xticklabels(a)
+a[1] = 'no class'
+a[2:] = labels[2:] - 1
+result = ax1.set_xticklabels(a)
 
 pdf.savefig()
-
-# plt.show()
-
+plt.close()
 ###### Go into each iteration_data.star file and read in information, such as particle class assignments etc.
 
 groupnumarray = np.zeros((part, iterations), dtype=np.double)  # Class assignments over all iterations
@@ -194,7 +170,7 @@ changes = []
 
 micnumdict = collections.defaultdict(list)
 
-print ('')
+print('')
 for datafile in iterationlist:
 
     miciterdict = collections.defaultdict(list)
@@ -229,13 +205,17 @@ for datafile in iterationlist:
 
                     if int(iteration) >= iterations - 2:
                         for i in range(0, len(checklist) - 1):
-                            check[particle, 0, iteration] =                                 l.split()[anglerot]
-                            check[particle, 1, iteration] =                                 l.split()[classcolumn]
+                            check[particle, 0, iteration] = \
+                                l.split()[anglerot]
+                            check[particle, 1, iteration] = \
+                                l.split()[classcolumn]
 
-                    if groupnumarray[particle, iteration]                         == groupnumarray[particle, int(iteration) - 1]:
+                    if groupnumarray[particle, iteration] \
+                        == groupnumarray[particle, int(iteration) - 1]:
                         change = 'nan'
                         change1 = 0
-                    if groupnumarray[particle, iteration]                         != groupnumarray[particle, int(iteration) - 1]:
+                    if groupnumarray[particle, iteration] \
+                        != groupnumarray[particle, int(iteration) - 1]:
                         change = groupnum
                         change1 = 1
                         changesum += 1
@@ -243,13 +223,15 @@ for datafile in iterationlist:
                     particle += 1
     changes.append(changesum)
 
-    print ('Iteration %s: %s particles changed class assignments'         % (iteration, changesum))
+    print('Iteration %s: %s particles changed class assignments' \
+        % (iteration, changesum))
 
-    # # After each iteration create Histogram of class assignments for each micrograph
+    ## After each iteration create Histogram of class assignments for each micrograph
 
-    miciterdict = collections.OrderedDict(sorted(miciterdict.items(),
-            key=operator.itemgetter(0)))
-    for (key, value) in miciterdict.items():  ## In Python3, dict.iteritems was renamed to dict.items
+    miciterdict = \
+        collections.OrderedDict(sorted(list(miciterdict.items()),
+                                key=operator.itemgetter(0)))
+    for (key, value) in list(miciterdict.items()):
         michisto = []
         for numb in value:
             michisto.append(float(numb))
@@ -276,13 +258,14 @@ for datafile in iterationlist:
             if 'class' in l and 'mrc' in l and 'mrcs' not in l:
                 classnum = int((l.split('.mrc')[0])[-3:])
                 rotation[classnum, iteration] = l.split()[rotationcol]
-                translation[classnum, iteration] =                     l.split()[translationcol]
+                translation[classnum, iteration] = \
+                    l.split()[translationcol]
 
 rotation = np.array(rotation[1:])
 translation = np.array(translation[1:])
 
 if len(set(rotation[0])) == 1:
-    print ('You did not perform image alignment during classification - skipping these two plots!')
+    print('You did not perform image alignment during classification - skipping these two plots!')
 
 if len(set(rotation[0])) > 1:
 
@@ -303,9 +286,7 @@ if len(set(rotation[0])) > 1:
     plt.xlim(2, iterations)
     plt.legend(loc='best')
     pdf.savefig()
-
-    # plt.show()
-
+    plt.close()
 # Translational
 
     cmap = plt.get_cmap('jet', int(classes) + 1)
@@ -323,9 +304,7 @@ if len(set(rotation[0])) > 1:
     plt.xlim(2, iterations)
     plt.legend(loc='best')
     pdf.savefig()
-
-    # plt.show()
-
+plt.close()
 ###########################################################################
 
 ### Sort group assignment array column by column
@@ -366,6 +345,7 @@ cb1.set_label('Class #')
 plt.xlim(2, iterations - .5)
 
 pdf.savefig()
+plt.close()
 
 # plt.show()
 
@@ -395,7 +375,7 @@ cb1.ax.tick_params(labelsize=16)
 cb1.set_label('Class #')
 plt.xlim(iterations - 6.5, iterations - .5)
 pdf.savefig()
-
+plt.close()
 # plt.show()
 
 #########################################################################################################################################################
@@ -411,7 +391,7 @@ labelsY = []
 
 for c in check:
     checkdict[c[:][1][-1]].append(c[:][1][-2])
-for (key, value) in checkdict.items():
+for (key, value) in list(checkdict.items()):
     (hist, bins) = np.histogram(value, bins=np.arange(1, int(classes)
                                 + 2))  # , normed=True)
     checktest.append(hist)
@@ -437,7 +417,7 @@ cb2.set_label('Fraction of particles went into group #')
 plt.figtext(0, 0,
             'Particle class assignment changes in the last iteration')
 pdf.savefig()
-
+plt.close()
 # plt.show()
 
 ######################################################################################################################
@@ -478,7 +458,7 @@ plt.figtext(0, 0,
             'Micrographs contributing to certain classes (e.g. important when merging datasets)'
             )
 pdf.savefig()
-
+plt.close()
 # plt.show()
 
 ###### Find out how often particles are jumping
@@ -531,7 +511,7 @@ plt.figtext(0, 0, 'Gaussian sigma: %s, variance: %s, mean: %s'
             % (sigma1, variance1, mean1))
 plt.plot(x1, scipy.stats.norm.pdf(x1, mean1, sigma1))
 pdf.savefig()
-
+plt.close()
 ### Number of assignment changes per iteration
 
 plt.figure(num=None, dpi=80, facecolor='white')
@@ -542,7 +522,7 @@ plt.ylabel('# of changed assignments', fontsize=13)
 plt.grid()
 plt.plot(changes[2:])
 pdf.savefig()
-
+plt.close()
 # plt.show()
 
 #########################################################################################################################################################
@@ -560,21 +540,21 @@ for column in checkarraysorted.transpose():
 
         # print groupnumarraysorted[:,-1][ci]-1, ci, col
 
-    for (key, value) in lastitgrouparray.items():
+    for (key, value) in list(lastitgrouparray.items()):
         histocolarray[key].append(value)
 
         # print key....#STILL has 0,3,4!!!
 
 fincolarray = collections.defaultdict(list)
 
-for (key, value) in histocolarray.items():
+for (key, value) in list(histocolarray.items()):
     for (vi, v) in enumerate(value):
 
         # print key, vi, v....................########### LOSING KEY
 
         fincolarray[vi].append(v)
 
-for (key2, value2) in fincolarray.items():
+for (key2, value2) in list(fincolarray.items()):
     rangeval = []  # temp2 = [];
     temp = []
 
@@ -609,10 +589,9 @@ for (key2, value2) in fincolarray.items():
         plt.ylabel('# particles per bin', fontsize=13)
         plt.grid()
         pdf.savefig()
+        plt.close()
 
-        # plt.show()
-
-########################## DELETE UNWANTED PARTICLES FROM INITIAL STAR FILE ##FIXME
+################################################################### DELETE UNWANTED PARTICLES FROM INITIAL STAR FILE ##FIXME
 
 particcount = 0
 initstarfile = '%s_it001_data.star' % rootname
@@ -621,11 +600,12 @@ if filtstar != 'false' or micfilt != '':
 
  # #######################
 
-    print ('The mean jump score is: 					%s' % mean1)
+    print('The mean jump score is: 					%s' % mean1)
     if sigmafac == 1:
-        print ('You did not specify a cutoff, I will use a sigma of 1 above mean: %s'             % (float(mean1) + float(sigmafac) * float(sigma1)))
+        print('You did not specify a cutoff, I will use a sigma of 1 above mean: %s' \
+            % (float(mean1) + float(sigmafac) * float(sigma1)))
     if sigmafac != 1:
-        print ('I will use a cutoff of: 					%s' % (float(mean1)
+        print('I will use a cutoff of: 					%s' % (float(mean1)
                 + float(sigmafac) * float(sigma1)))
     cutoff = float(mean1) + float(sigmafac) * float(sigma1)
 
@@ -653,21 +633,16 @@ if filtstar != 'false' or micfilt != '':
                 # print('nomicfilt')
 
                 if filtstar != 'false' and micfilt != '':
-                    if float(m.split()[rescol]) <= float(micfilt)                         and particcount not in unwanted:
+                    if float(m.split()[rescol]) <= float(micfilt) \
+                        and particcount not in unwanted:
                         a1.write(m)
 
                 # print('both')
 
                 particcount += 1
-    print ('Saved %s_filtered.star file ommitting %s out of %s particles that changed classes too often'         % (rootname, len(unwanted), particcount))
+    print('Saved %s_filtered.star file ommitting %s out of %s particles that changed classes too often' \
+        % (rootname, len(unwanted), particcount))
 a1.close()
 
-print ('Saved all plots in %s' % output)
+print('Saved all plots in %s' % output)
 pdf.close()
-
-
-# In[ ]:
-
-
-
-

@@ -142,10 +142,13 @@ cb1.set_ticklabels(labels)
 cb1.ax.tick_params(labelsize=16)
 cb1.set_label('Class #')
 cb1.set_label('Color for each class')
+
 #cb1.set_label('Class \'0\' means unassigned when using small subset')
 a=ax1.get_xticks().tolist()
+print(a)
 a[0]='no class'
 a[1:-1]=labels[1:-1]
+print(a)
 ax1.set_xticklabels(a)
 
 pdf.savefig()
